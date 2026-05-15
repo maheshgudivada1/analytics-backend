@@ -16,7 +16,7 @@ CORS(app, supports_credentials=True)
 
 # MongoDB connection
 MONGO_URI = os.environ.get("MONGO_URI", "mongodb+srv://maheshgudivada55_db_user:tUkEowpuMnXMxtrZ@cluster0.bodppfz.mongodb.net/?appName=Cluster0")
-client = MongoClient(MONGO_URI)
+client = MongoClient(MONGO_URI, tlsVersion='TLSv1_2')
 db = client["analytics_db"]
 events_collection = db["events"]
 sessions_collection = db["sessions"]
