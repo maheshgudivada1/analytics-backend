@@ -16,16 +16,20 @@ CORS(app, supports_credentials=True)
 
 # MongoDB connection
 MONGO_URI = os.environ.get("MONGO_URI", "mongodb+srv://maheshgudivada55_db_user:tUkEowpuMnXMxtrZ@cluster0.bodppfz.mongodb.net/?appName=Cluster0")
-client = MongoClient(MONGO_URI, tlsVersion='TLSv1_2')
+client = MongoClient(MONGO_URI)
 db = client["analytics_db"]
 events_collection = db["events"]
 sessions_collection = db["sessions"]
 
 # Create indexes for performance
-events_collection.create_index([("session_id", 1), ("timestamp", 1)])
-events_collection.create_index([("event_type", 1)])
-events_collection.create_index([("page_url", 1)])
-sessions_collection.create_index([("session_id", 1)], unique=True)
+try:
+    events_collection.create_index([("session_id", 1), ("timestamp", 1)])
+    events_collection.create_index([("event_type", 1)])
+    events_collection.create_index([("page_url", 1)])
+    sessions_collection.create_index([("session_id", 1)], unique=True)
+except Exception as e:
+    print(f"Warning: Failed to create indexes: {e}")
+    # Continue without indexes
 
 
 def serialize_doc(doc):
